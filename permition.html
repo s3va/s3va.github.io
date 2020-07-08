@@ -1,0 +1,40 @@
+<pre style="white-space:pre-wrap;">
+implementation 'androidx.activity:activity-ktx:1.2.0-alpha06'
+implementation 'androidx.fragment:fragment-ktx:1.3.0-alpha06'
+       
+       val requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) {
+                if (it) {
+                    Log.d("RequestPermission","********************************* it=$it *******************************")
+                    Toast.makeText(applicationContext,"permission granted",Toast.LENGTH_LONG).show()
+                    proggy()
+                } else {
+                    Log.d("RequestPermission","******************************** else it=$it **************************")
+                    Toast.makeText(applicationContext,"cannot send SMS without your permission",Toast.LENGTH_LONG).show()
+                }
+            }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.SEND_SMS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    Log.d("checkSelfPermission","PackageManager.PERMISSION_GRANTED")
+                    proggy()
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS) -> {
+                    Toast.makeText(applicationContext,"Proggy needs your permission to send SMS",Toast.LENGTH_LONG).show()
+                    Log.d("Rational","fucking Rationaly")
+                }
+                else -> {
+                    Log.d("runRequestPer","requestPermissionLauncher.launch( Manifest.permission.SEND_SMS)")
+                    requestPermissionLauncher.launch(
+                        Manifest.permission.SEND_SMS)
+                }
+            }
+        }
+</pre>
